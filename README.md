@@ -25,7 +25,8 @@ EKS runs upstream Kubernetes and is certified Kubernetes conformant so you can l
          - name: ng1
            desiredCapacity: 3
            instanceType: t2.micro
-           
+           ssh: 
+                  publicKeyName: sparsh 
            
 If you want, you can also launch a Fargte Cluster which will provide you a serverless compute. The YML code to launch a simple Fargate cluster is as follows -
 
@@ -57,7 +58,7 @@ After this, I run the following command in my command prompt -
     
 This will automatically create a Config file for the mentioned Cluster.
 
-**Step - 2:** Create an EFS storage which can be used by the PVC later. We prefer EFS storage because EBS storage can't be mounted to an instance running in any other subnet. This problem is solved by EFS. I have created an EFS system with the default security group coz I have modified the default security group to allow all incoming & outgoing traffic. 
+**Step - 2:** Create an EFS storage which can be used by the PVC later. We prefer EFS storage because EBS storage can't be mounted to an instance running in any other subnet. This problem is solved by EFS. I have created an EFS system with the default security group coz I have modified the default security group to allow all incoming & outgoing traffic. **Remember to connect the cluster VPC & correct security group otherwise your deployments will remain pending later on.**
 
 ![](/eksproject/efs.png)
 
@@ -101,7 +102,7 @@ This will automatically create a Config file for the mentioned Cluster.
                   server: fs-e8ab886b.efs.us-east-1.amazonaws.com
                   path: /
                   
-We also need to go inside our nodes & run this command once - _yum install amazon-efs-utils_. This will install the necessary softwares on those nodes so that they can be compatible with the EFS Storage.
+**We also need to go inside our nodes & run this command once - _yum install amazon-efs-utils_. Go inside the nodes via ssh & runn this command. This will install the necessary softwares on those nodes so that they can be compatible with the EFS Storage.**
                   
 **Step - 4:** Next, I have created a YML code to modify some permisssions using ROLE BASED ACCESS CONTROL (RBAC). The code is as follows -
 
@@ -322,7 +323,7 @@ Here is a screesnshot showing how these files were launched-
  ![](/eksproject/done.png)
 
 
-Now that our Ghost Architecture is launched, we can access it & use it -
+Now that our Ghost Architecture is launched, we can access it using the DNS & use it -
 
 
 ![](/eksproject/gh.jpg)
